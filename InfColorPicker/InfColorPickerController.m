@@ -16,6 +16,7 @@
 #import "InfColorSquarePicker.h"
 #import "InfColorPickerNavigationController.h"
 #import "InfHSBSupport.h"
+#import <bbLog.h>
 
 //------------------------------------------------------------------------------
 
@@ -57,6 +58,7 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 @property (nonatomic) IBOutlet UIView* sourceColorView;
 @property (nonatomic) IBOutlet UIView* resultColorView;
 @property (nonatomic) IBOutlet UINavigationController* navController;
+@property (weak, nonatomic) IBOutlet UISlider *alphaSlider;
 
 @end
 
@@ -124,7 +126,9 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 	[super viewDidLoad];
 	
 	self.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
-	
+
+	[self updateAlphaSlider];
+
 	_barPicker.value = _hue;
 	_squareView.hue = _hue;
 	_squarePicker.hue = _hue;
@@ -137,6 +141,10 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 		_resultColorView.backgroundColor = _resultColor;
 }
 
+-(void) viewDidDisappear:(BOOL)animated
+{
+	[self.delegate colorPickerControllerDidFinish: self];
+}
 //------------------------------------------------------------------------------
 
 - (BOOL) shouldAutorotateToInterfaceOrientation: (UIInterfaceOrientation) interfaceOrientation
@@ -198,6 +206,10 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 {
 	[self.delegate colorPickerControllerDidFinish: self];
 }
+- (IBAction)alphaChanged:(id)sender
+{
+	[self updateResultColor];
+}
 
 //------------------------------------------------------------------------------
 #pragma mark	Properties
@@ -222,7 +234,7 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 	_resultColor = [UIColor colorWithHue: _hue
 							  saturation: _saturation
 							  brightness: _brightness
-								   alpha: 1.0f];
+								   alpha: self.alphaSlider.value];
 	
 	[self didChangeValueForKey: @"resultColor"];
 	
@@ -261,15 +273,29 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 }
 
 //------------------------------------------------------------------------------
+-(void)updateAlphaSlider
+{
+	CGFloat alpha;
+	bbLogColor(_sourceColor);
+	[_sourceColor getHue:nil saturation:nil brightness:nil alpha:&alpha];
+	self.alphaSlider.value=alpha;
+	
+}
+
 
 - (void) setSourceColor: (UIColor*) newValue
 {
 	if (![_sourceColor isEqual: newValue]) {
+		bbLogColor(_sourceColor);
 		_sourceColor = newValue;
 		
 		_sourceColorView.backgroundColor = _sourceColor;
 		
 		self.resultColor = newValue;
+		bbLogColor(_resultColor);
+		
+		[self updateAlphaSlider];
+		
 	}
 }
 

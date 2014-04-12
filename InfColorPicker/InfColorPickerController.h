@@ -38,8 +38,8 @@
 
 @optional
 
+// This is only called when the color picker is presented modally.
 - (void) colorPickerControllerDidFinish: (InfColorPickerController*) controller;
-	// This is only called when the color picker is presented modally.
 
 - (void) colorPickerControllerDidChangeColor: (InfColorPickerController*) controller;
 
