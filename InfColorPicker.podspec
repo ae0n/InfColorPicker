@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.description = "iOS color picker view controller which presents a hue bar and a saturation/brightness box to allow selection of any RGB color."
 
   s.frameworks   = 'QuartzCore'
-  s.source_files = 'InfColorPicker/*.{h,m,xib}'
+  s.source_files = 'InfColorPicker/*.{h,m}'
+  s.resources = 'InfColorPicker/*.{xib}'
   s.requires_arc = true
 end
