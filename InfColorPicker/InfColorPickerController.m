@@ -16,7 +16,6 @@
 #import "InfColorSquarePicker.h"
 #import "InfColorPickerNavigationController.h"
 #import "InfHSBSupport.h"
-#import <bbLog.h>
 
 //------------------------------------------------------------------------------
 
@@ -276,7 +275,6 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 -(void)updateAlphaSlider
 {
 	CGFloat alpha;
-	bbLogColor(_sourceColor);
 	[_sourceColor getHue:nil saturation:nil brightness:nil alpha:&alpha];
 	self.alphaSlider.value=alpha;
 	
@@ -286,13 +284,11 @@ static void HSVFromUIColor(UIColor* color, float* h, float* s, float* v)
 - (void) setSourceColor: (UIColor*) newValue
 {
 	if (![_sourceColor isEqual: newValue]) {
-		bbLogColor(_sourceColor);
 		_sourceColor = newValue;
 		
 		_sourceColorView.backgroundColor = _sourceColor;
 		
 		self.resultColor = newValue;
-		bbLogColor(_resultColor);
 		
 		[self updateAlphaSlider];
 		
